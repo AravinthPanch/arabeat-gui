@@ -8,5 +8,5 @@ Graphical User Interface for Interaction Optimisation of ECG and Audio Waveforms
 
 ## COLLABORATORS
 
-- Shresth Agrawal <>
+- Shresth Agrawal <www.salabs.me>
 - Aravinth Panch <www.aravinth.info>
