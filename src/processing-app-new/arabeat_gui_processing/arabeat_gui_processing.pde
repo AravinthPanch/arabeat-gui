@@ -1,3 +1,11 @@
+/*
+This code was built with Processing 3.5.3
+
+Depedencies
+-----------
+Grafica 1.9.0
+ControlP5 2.2.6
+*/
 
 import processing.serial.*;
 import grafica.*;
@@ -17,6 +25,7 @@ float currentAmplitude= 0;
 
 ControlP5 cp5;
 Accordion accordion;
+Chart plot2;
 
 void settings() {
   fullScreen();
@@ -47,7 +56,7 @@ void setup()
   plot1.getYAxis().getAxisLabel().setText("Amplitude");
   
   
-  // List Setup     lock()             
+  // List Setup                 
   cp5 = new ControlP5(this);
   
   Group accordionGroup1 = cp5.addGroup("Amplitude Data")
@@ -107,6 +116,9 @@ void setup()
      .setSize(100,20)
      .setRange(100,500)
      .setValue(200)
+     .lock()
+     .setMin(-10000)
+     .setMax(10000)
      .moveTo(accordianGroup3);
 
   // create a new accordion
@@ -121,6 +133,18 @@ void setup()
  
  accordion.open(0,1,2);
  accordion.setCollapseMode(Accordion.MULTI);
+ 
+  // Second Plot  
+  plot2 = cp5.addChart("DigitalHeartBeat")
+               .setPosition(50, plotHeight1+200)
+               .setSize(530, 100)
+               .setRange(-0.5, 1.5)
+               .setView(Chart.LINE) 
+               .setStrokeWeight(1.5)
+               .setColorCaptionLabel(color(40));
+
+  plot2.addDataSet("digitalData");
+  plot2.setData("digitalData", new float[100]);
  
 }
 
@@ -139,6 +163,9 @@ void draw()
     if(!Float.isNaN(currentAmplitude))
     {
       plot1.addPoint(relativeTime,currentAmplitude);
+      cp5.getController("Pitch").setValue(currentAmplitude);
+      if(currentAmplitude>0)  plot2.push("digitalData", 1);
+      else plot2.push("digitalData", 0);
     }
     
   }
