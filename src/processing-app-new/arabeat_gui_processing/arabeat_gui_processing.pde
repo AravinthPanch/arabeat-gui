@@ -27,6 +27,9 @@ ControlP5 cp5;
 Accordion accordion;
 Chart plot2;
 
+DropdownList choosePort;
+bool isPortChoosen = false;
+
 void settings() {
   fullScreen();
 }
@@ -38,9 +41,6 @@ void setup()
   smooth();
   //surface.setResizable(true);
   
-  // Start 
-  String portName = Serial.list()[0];
-  serial = new Serial(this, portName, baudRate);
   
   // Add the Header Image to the Canva
   headerImage = loadImage("arabeat.png"); 
@@ -145,7 +145,36 @@ void setup()
 
   plot2.addDataSet("digitalData");
   plot2.setData("digitalData", new float[100]);
+  
+  choosePort = cp5.addDropdownList("choosePort")
+          .setPosition(10, 10);
+  
+  choosePort.setBackgroundColor(color(190));
+  choosePort.setItemHeight(20);
+  choosePort.setBarHeight(15);
+  choosePort.getCaptionLabel().set("Choose Port");
+  
+  for (int i=0;i<(Serial.list()).length;i++) {
+    choosePort.addItem(Serial.list()[i], i);
+  }
+  //ddl.scroll(0);
+  choosePort.setColorBackground(color(60));
+  choosePort.setColorActive(color(255, 128));        
+          
  
+ 
+}
+
+void controlEvent(ControlEvent theEvent) {
+
+  //|| (theEvent.getController().getName()).equals("choosePort [DropdownList]")
+  if (theEvent.isController() &&  (theEvent.getController().getName()).equals("choosePort")) {
+    int portNumber= int(theEvent.getController().getValue());
+    String portName = Serial.list()[portNumber];
+    println("Port Choosen : "+ portName); 
+    serial = new Serial(this, portName, baudRate);
+    isPortChoosen = true;
+  }
 }
 
 
@@ -156,19 +185,20 @@ void draw()
   
   // Add Header Image
   image(headerImage, (width/2)-125 , 10);
-  if ( serial.available() > 0) {  
-    String val = serial.readString();
-    currentAmplitude = float(val);
-    print(currentAmplitude+" "+val+"\n");
-    if(!Float.isNaN(currentAmplitude))
-    {
-      plot1.addPoint(relativeTime,currentAmplitude);
-      cp5.getController("Pitch").setValue(currentAmplitude);
-      if(currentAmplitude>0)  plot2.push("digitalData", 1);
-      else plot2.push("digitalData", 0);
+  if(isPortChoosen){
+    if ( serial.available() > 0) {  
+      String val = serial.readString();
+      currentAmplitude = float(val);
+      //print(currentAmplitude+" "+val+"\n");
+      if(!Float.isNaN(currentAmplitude)){
+        plot1.addPoint(relativeTime,currentAmplitude);
+        cp5.getController("Pitch").setValue(currentAmplitude);
+        if(currentAmplitude>0)  plot2.push("digitalData", 1);
+        else plot2.push("digitalData", 0);
+      }
     }
-    
   }
+  
   
   relativeTime+=1;
   //Draw the first plot  
