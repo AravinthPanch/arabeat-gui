@@ -12,9 +12,15 @@ import grafica.*;
 import controlP5.*;
 
 Serial serial;
-int baudRate=9600;
+int baudRate= 9600;
 
 PImage headerImage;
+
+int sequenceLength= 12;
+PImage[] animationSequence = new PImage[sequenceLength+1];
+int lastFrame= 1;
+int lastTime=1;
+int bpm= 80;
 
 public GPlot plot1;
 public GPointsArray plotData1;
@@ -28,7 +34,7 @@ Accordion accordion;
 Chart plot2;
 
 DropdownList choosePort;
-bool isPortChoosen = false;
+boolean isPortChoosen = false;
 
 void settings() {
   fullScreen();
@@ -39,6 +45,7 @@ void setup()
   background(255);
   noStroke();
   smooth();
+  cp5 = new ControlP5(this);
   //surface.setResizable(true);
   
   
@@ -46,6 +53,17 @@ void setup()
   headerImage = loadImage("arabeat.png"); 
   headerImage.resize(250, 0);
   
+  //Animation Image Sequence
+  for(int i= 1; i<=sequenceLength; i++){
+    animationSequence[i] = loadImage("heart"+i+".gif");
+    animationSequence[i].resize(100,0);
+  }
+  cp5.addSlider("BPM")
+     .setPosition(1000,250)
+     .setSize(100,20)
+     .setColorCaptionLabel(color(0,64))
+     .setRange(0,200)
+     .setValue(80);
   
   // Setup for the first plot 
   plot1 = new GPlot(this);
@@ -57,8 +75,6 @@ void setup()
   
   
   // List Setup                 
-  cp5 = new ControlP5(this);
-  
   Group accordionGroup1 = cp5.addGroup("Amplitude Data")
                 .setBackgroundColor(color(0, 64))
                 .setBackgroundHeight(150);
@@ -104,7 +120,7 @@ void setup()
      .setSize(40,50)
      .moveTo(accordianGroup3);
      
-  cp5.addSlider("BPM")
+  cp5.addSlider("Val")
      .setPosition(60,20)
      .setSize(100,20)
      .setRange(100,500)
@@ -131,8 +147,8 @@ void setup()
                  .addItem(accordianGroup3);                
  
  
- accordion.open(0,1,2);
- accordion.setCollapseMode(Accordion.MULTI);
+  accordion.open(0,1,2);
+  accordion.setCollapseMode(Accordion.MULTI);
  
   // Second Plot  
   plot2 = cp5.addChart("DigitalHeartBeat")
@@ -177,14 +193,27 @@ void controlEvent(ControlEvent theEvent) {
   }
 }
 
+void createAnimation(int bpm){
+  int timeDiff =  millis() - lastTime;
+  int requiredTimeDiff = int((60*1000)/(bpm*sequenceLength));
+  image(animationSequence[lastFrame], 1000, 150);
+  if(timeDiff>=requiredTimeDiff){
+    //change frame
+    lastTime= millis();
+    lastFrame= (lastFrame%sequenceLength)+1;
+  }
+
+}
+
 
 void draw()
 {
   //To Refresh the Background
   background(255);
-  
+  //image(animationSequence[1], 1000, 150);
   // Add Header Image
   image(headerImage, (width/2)-125 , 10);
+  createAnimation(bpm);
   if(isPortChoosen){
     if ( serial.available() > 0) {  
       String val = serial.readString();
@@ -199,6 +228,7 @@ void draw()
     }
   }
   
+  bpm = int(cp5.getController("BPM").getValue());
   
   relativeTime+=1;
   //Draw the first plot  
