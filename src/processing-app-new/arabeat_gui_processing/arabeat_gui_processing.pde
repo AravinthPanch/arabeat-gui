@@ -269,5 +269,8 @@ void draw()
   plot1.drawGridLines(GPlot.BOTH);
   plot1.drawLines();
   plot1.endDraw();
+  if(relativeTime>200){
+     plot1.removePoint(0);
+  }
 
 }
