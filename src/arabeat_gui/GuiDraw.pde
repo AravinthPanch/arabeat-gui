@@ -4,6 +4,7 @@ int lastFrame= 1;
 int lastTime=1;
 int bpm= 80;
 boolean isPortChoosen = false;
+boolean isFullScreen= false;
 
 
 void createAnimation(int bpm){
@@ -52,8 +53,7 @@ void graph1Plot(int val){
 }
 
 void GUIDraw(){
- 
-  //image(animationSequence[1], 1000, 150);
+ //image(animationSequence[1], 1000, 150);
   // Add Header Image
   image(headerImage, (width/2)-125 , 10);
   createAnimation(bpm);
@@ -77,6 +77,33 @@ void GUIDraw(){
        .setSize(int(width*0.56), int(height*0.20));
  
   accordion.setPosition(width*0.68,headerImage.height+50);
-  
+}
+
+
+public void setFullScreen(){
+  if(!isFullScreen){
+    buttonFullScreen.setImage(buttonMinimizeImage);
+    surface.setSize(displayWidth, displayHeight);
+    isFullScreen = true;
+  }
+  else {
+    buttonFullScreen.setImage(buttonFullScreenImage);
+    surface.setSize(850,600);
+     isFullScreen = false;  
+  } 
+}
+
+public void refreshEverything(){
+   if(isPortChoosen){
+   isPortChoosen = false;
+   serial.stop();
+   }
+  choosePortDropdown.clear();
+  for (int i=0;i<(Serial.list()).length;i++) {
+    choosePortDropdown.addItem(Serial.list()[i], i);
+  }
+   while(plot1.getPointsRef().getNPoints()>0){
+           plot1.removePoint(0);
+        }
   
 }

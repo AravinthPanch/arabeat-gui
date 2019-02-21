@@ -6,10 +6,10 @@ public GPointsArray plotData1;
 int plotHeight1= 250;
 int plotWidth1= 450;
 
-PImage headerImage;
-
+PImage headerImage, buttonFullScreenImage, buttonMinimizeImage, buttonRefreshImage;
 ControlP5 cp5;
 Accordion accordion;
+Button buttonFullScreen, buttonRefresh;
 Chart plot2;
 
 DropdownList choosePortDropdown, baudrateDropdown;
@@ -36,7 +36,7 @@ void setupGUI(){
   // Setup for the first plot
   plot1 = new GPlot(this);
   plot1.setPos(10, headerImage.height+10);
-  plot1.setDim(plotWidth1, plotHeight1);
+  plot1.setDim(width*0.55,height*0.45);
   plot1.getXAxis().getAxisLabel().setText("Time");
   plot1.getYAxis().getAxisLabel().setText("Analog Val0");
 
@@ -44,7 +44,7 @@ void setupGUI(){
   // List Setup
   Group accordionGroup1 = cp5.addGroup("Configuration")
                 .setBackgroundColor(color(0, 64))
-                .setBackgroundHeight(20)
+                .setBackgroundHeight(130)
                 .setHeight(10);
                 
  cp5.addSlider("timeScale")
@@ -66,12 +66,13 @@ void setupGUI(){
                   .setBarHeight(15)
                   .moveTo(accordionGroup1)
                   .setColorActive(color(255, 128))
-                  .setCaptionLabel("Baudrate")
+                  .setCaptionLabel("115200")
                   .setOpen(false); 
-  
+                  
   for (int i=0;i<baudrateList.length;i++) {
     baudrateDropdown.addItem(Integer.toString(baudrateList[i]), i);
   }
+  
   
   choosePortDropdown = cp5.addDropdownList("choosePort")
                   .setPosition(10, 10)
@@ -82,7 +83,6 @@ void setupGUI(){
                   .setColorActive(color(255, 128))   
                   .moveTo(accordionGroup1)
                   .setCaptionLabel("Choose Port")
-                  .bringToFront() 
                   .setOpen(false); 
 
   for (int i=0;i<(Serial.list()).length;i++) {
@@ -96,6 +96,7 @@ void setupGUI(){
                 .setLabel("Midi Data")
                 .setBackgroundColor(color(0, 64))
                 .setBackgroundHeight(50);
+                
 
   cp5.addSlider("analogVal0")
      .setLabel("Analog Val0")
@@ -123,24 +124,48 @@ void setupGUI(){
      .moveTo(accordianGroup2)
      .setColorCaptionLabel(color(0,64))
      .setRange(0,200)
-     .setValue(80);    
+     .setValue(80);
+     
+ Group accordianGroup3 = cp5.addGroup("otherSettings")
+                .setLabel("Settings")
+                .setBackgroundColor(color(0, 64))
+                .setBackgroundHeight(50);
+                
+ buttonFullScreenImage = loadImage("fullscreen.png");    
+ buttonFullScreenImage.resize(30,30);
+ buttonMinimizeImage = loadImage("minimize.png");
+ buttonMinimizeImage.resize(30,30);
+ buttonFullScreen = cp5.addButton("setFullScreen")
+     .setPosition(10,10)
+     .moveTo(accordianGroup3)
+     .setImage(buttonFullScreenImage)
+     .updateSize();
+ 
+ buttonRefreshImage = loadImage("refresh.png");
+ buttonRefreshImage.resize(30,30);
+ buttonRefresh = cp5.addButton("refreshEverything")
+     .setPosition(50,10)
+     .moveTo(accordianGroup3)
+     .setImage(buttonRefreshImage)
+     .updateSize();
+ 
+     
 
   // create a new accordion
   // add g1, g2, and g3 to the accordion.
   accordion = cp5.addAccordion("Data")
-                 .setPosition(plotWidth1+120,headerImage.height+50)
+                 .setPosition(width*0.68,headerImage.height+50)
                  .setWidth(200)
                  .addItem(accordionGroup1)
-                 .addItem(accordianGroup2);
-
-
+                 .addItem(accordianGroup2)
+                 .addItem(accordianGroup3);
+                 
   accordion.open(0,1);
   accordion.setCollapseMode(Accordion.MULTI);
-
   // Second Plot
   plot2 = cp5.addChart("DigitalHeartBeat")
-               .setPosition(60, plotHeight1+200)
-               .setSize(470, 100)
+               .setPosition(73, headerImage.height+height*0.45+85)
+               .setSize(int(width*0.56), int(height*0.20))
                .setRange(-0.5, 1.5)
                .setView(Chart.LINE)
                .setStrokeWeight(1.5)

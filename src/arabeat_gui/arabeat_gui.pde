@@ -23,7 +23,7 @@ void setup()
 
 void draw()
 {
-  //To Refresh the Background
+  //To Refresh the Background'
   background(255);
   if(isPortChoosen){
     while ( serial.available() > 0) {
