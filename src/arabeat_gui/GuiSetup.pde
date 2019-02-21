@@ -48,18 +48,18 @@ void setupGUI(){
                 .setHeight(10);
                 
  cp5.addSlider("timeScale")
-     .setPosition(10,30)
+     .setPosition(10,70)
      .setSize(100,20)
      .setCaptionLabel("Time Scale")
      .setRange(0,500)
-     .setValue(20)
+     .setValue(400)
      .setMin(0)
      .setMax(500)
      .moveTo(accordionGroup1);               
               
                 
   baudrateDropdown = cp5.addDropdownList("baudrate")
-                  .setPosition(110, 10)
+                  .setPosition(10, 40)
                   .setBackgroundColor(color(190))
                   .setItemHeight(20)
                   .setWidth(60)
@@ -75,7 +75,7 @@ void setupGUI(){
   
   choosePortDropdown = cp5.addDropdownList("choosePort")
                   .setPosition(10, 10)
-                  .setWidth(90)
+                  .setWidth(180)
                   .setBackgroundColor(color(190))
                   .setItemHeight(20)
                   .setBarHeight(15)
