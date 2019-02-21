@@ -18,7 +18,7 @@ int baudrateList[] = {9600, 31250, 115200};
 void setupGUI(){
   noStroke();
   smooth();
-  frame.setResizable(true);
+  surface.setResizable(true);
   cp5 = new ControlP5(this);
   //surface.setResizable(true);
 

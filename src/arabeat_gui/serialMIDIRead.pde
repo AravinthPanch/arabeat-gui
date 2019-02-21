@@ -29,16 +29,13 @@ void serialMIDIRead(){
           data= (data|serial.read());
           // if the first MSB has set bit then the Val is negative
           if(data>32767) data= data| negativeConversion;
-          println("AnalogVal0:"+data);
           graph1Plot(data);
           break;
 
         case DigitalVal0:
           while(serial.available()==0);
           data=serial.read();
-          println("DigitalVal0:"+data);
-          plot2.push("digitalData", data);
-          cp5.getController("digitalVal0").setValue(data);
+          graph2Plot(data);
           break;
       }
 }
