@@ -26,7 +26,7 @@ void draw()
   //To Refresh the Background
   background(255);
   if(isPortChoosen){
-    if ( serial.available() > 0) {
+    while ( serial.available() > 0) {
      serialMIDIRead();
     }
   }

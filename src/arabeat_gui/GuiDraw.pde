@@ -35,6 +35,16 @@ void controlEvent(ControlEvent theEvent) {
   
 }
 
+void graph1Plot(int val){
+    while(plot1.getPointsRef().getNPoints()>cp5.getController("timeScale").getValue()){
+           plot1.removePoint(0);
+        }
+    plot1.addPoint(relativeTime,val);
+    relativeTime+=1;
+    cp5.getController("analogVal0").setValue(val);    
+  
+}
+
 void GUIDraw(){
  
   //image(animationSequence[1], 1000, 150);
@@ -43,12 +53,8 @@ void GUIDraw(){
   createAnimation(bpm);
   bpm = int(cp5.getController("BPM").getValue());
 
-  relativeTime+=1;
   //Draw the first plot
   //plot1.activatePanning();
-  if(plot1.getPointsRef().getNPoints()>cp5.getController("timeScale").getValue()){
-           plot1.removePoint(0);
-        }
   plot1.beginDraw();
   plot1.drawBackground();
   plot1.drawBox();

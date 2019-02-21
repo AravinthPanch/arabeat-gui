@@ -30,8 +30,7 @@ void serialMIDIRead(){
           // if the first MSB has set bit then the Val is negative
           if(data>32767) data= data| negativeConversion;
           println("AnalogVal0:"+data);
-          plot1.addPoint(relativeTime,data);
-          cp5.getController("analogVal0").setValue(data);
+          graph1Plot(data);
           break;
 
         case DigitalVal0:
