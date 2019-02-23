@@ -1,5 +1,8 @@
+/*
+This file contains the function which reads the Byte serial and converts into command
+and Data.Then using this data plot the Graph.
+*/
 import processing.serial.*;
-
 
 Serial serial;
 int baudrate= 115200;

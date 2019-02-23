@@ -1,3 +1,9 @@
+/*
+This file contains the Functions that are called while the Initial Setup of the
+GUI which Includes adding the Header Images, Creating the Graphs, Initializing the Frames
+for Animation and setting up of the Side Menu(Accordion)
+*/
+
 import grafica.*;
 import controlP5.*;
 

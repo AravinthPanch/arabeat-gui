@@ -1,3 +1,8 @@
+/*
+This file contains the Funtions called while the Draw function of
+processing is runs which mostly includes ploting the Graph, Making Objects Dynamic
+and Creating Animation
+*/
 int sequenceLength= 12;
 PImage[] animationSequence = new PImage[sequenceLength+1];
 int lastFrame= 1;
