@@ -10,7 +10,11 @@ int negativeConversion = -65536;
 int data;
 int command;
 
-
+/*
+Reads the Serial using MIDI and Firmat Protocol
+and calls the Plot function according the data
+Detailed Explanation in the README.md
+*/
 void serialMIDIRead(){
    command= serial.read();
       data= 0;

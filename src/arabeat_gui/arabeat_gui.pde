@@ -11,7 +11,9 @@ Processing.Serial *
 
 
 
-
+/*
+The time for the y-axis of analog values
+*/
 int relativeTime= 0;
 
 void setup()
