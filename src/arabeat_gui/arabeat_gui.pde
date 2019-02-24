@@ -20,7 +20,7 @@ int relativeTime= 0;
 
 void setup()
 {
-  size(850,600);
+  size(1280,800);
   setupGUI();
   background(255);
 }
