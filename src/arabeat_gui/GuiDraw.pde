@@ -81,7 +81,7 @@ void GUIDraw(){
  //image(animationSequence[1], 1000, 150);
   // Add Header Image
   image(headerImage, (width/2)-125 , 10);
-  createAnimation(bpm);
+  //createAnimation(bpm);
   bpm = int(cp5.getController("BPM").getValue());
 
   //Draw the first plot

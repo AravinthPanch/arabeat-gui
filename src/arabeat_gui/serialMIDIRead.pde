@@ -26,13 +26,19 @@ void serialMIDIRead(){
         // Add a case for every command value you want to listen
         case AnalogVal0:
           // For first 2 MSB
-          while(serial.available()==0);
+          while(serial.available()==0){
+            delay(1);
+          }
           data= (serial.read())<<7;
           //For middle 7 Bits
-          while(serial.available()==0);
+          while(serial.available()==0){
+            delay(1);
+          }
           data= (data|serial.read())<<7;
           //For last 7 Bits
-          while(serial.available()==0);
+          while(serial.available()==0){
+           delay(1);
+          }
           data= (data|serial.read());
           // if the first MSB has set bit then the Val is negative
           if(data>32767) data= data| negativeConversion;
@@ -40,7 +46,9 @@ void serialMIDIRead(){
           break;
 
         case DigitalVal0:
-          while(serial.available()==0);
+          while(serial.available()==0){
+          delay(1);
+          }
           data=serial.read();
           graph2Plot(data);
           break;
