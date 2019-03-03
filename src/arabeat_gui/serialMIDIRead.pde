@@ -3,12 +3,13 @@ This file contains the function which reads the Byte serial and converts into co
  and Data.Then using this data plot the Graph.
  */
 import processing.serial.*;
-
 Serial serial;
+
+final int ECG_ANALOG_VOLTAGE = 0xE0;
+final int HEART_PULSE = 0x90;
+final int R2R_IN_MS = 0xE1; 
+
 int baudrate= 115200;
-final int AnalogVal0 = 0xE0; // ECG Analog Voltage
-final int DigitalVal0 = 0x90; // Heart Pulse
-final int DigitalVal1 = 0x91; // R2R
 String portName;
 int negativeConversion = -65536;
 int data;
@@ -25,7 +26,7 @@ void serialMIDIRead() {
   switch(command) {
 
     // Add a case for every command value you want to listen
-  case AnalogVal0:
+  case ECG_ANALOG_VOLTAGE:
     // For first 2 MSB
     while (serial.available()==0) {
       delay(1);
@@ -46,20 +47,31 @@ void serialMIDIRead() {
     graph1Plot(data);
     break;
 
-  case DigitalVal0:
+  case HEART_PULSE:
     while (serial.available()==0) {
       delay(1);
     }
     data=serial.read();
-    setECG(data);
+    set_heart_pulse(data);
     break;
 
-  case DigitalVal1:
+  case R2R_IN_MS:
+    // For first 2 MSB
     while (serial.available()==0) {
       delay(1);
     }
-    data=serial.read();
-    setR2R(data);
+    data= (serial.read())<<7;
+    //For middle 7 Bits
+    while (serial.available()==0) {
+      delay(1);
+    }
+    data= (data|serial.read())<<7;
+    //For last 7 Bits
+    while (serial.available()==0) {
+      delay(1);
+    }
+    data= (data|serial.read());    
+    set_R2R_in_ms(data);
     break;
   }
 }

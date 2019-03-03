@@ -82,7 +82,6 @@ void addAccordion() {
     .setMax(500)
     .moveTo(accordionGroup1);
 
-
   baudrateDropdown = cp5.addDropdownList("baudrate")
     .setPosition(10, 40)
     .setBackgroundColor(color(190))
@@ -94,10 +93,10 @@ void addAccordion() {
     .setCaptionLabel("115200")
     .setOpen(false);
 
+  // Add all the serial baudrates to the list
   for (int i=0; i<baudrateList.length; i++) {
     baudrateDropdown.addItem(Integer.toString(baudrateList[i]), i);
   }
-
 
   choosePortDropdown = cp5.addDropdownList("choosePort")
     .setPosition(10, 10)
@@ -110,20 +109,18 @@ void addAccordion() {
     .setCaptionLabel("Choose Port")
     .setOpen(false);
 
+  // Add all the available serial ports to the list
   for (int i=0; i<(Serial.list()).length; i++) {
     choosePortDropdown.addItem(Serial.list()[i], i);
   }
-
-
-
 
   Group accordionGroup2 = cp5.addGroup("midiData")
     .setLabel("Midi Data")
     .setBackgroundColor(color(0, 64))
     .setBackgroundHeight(140);
 
-
-  cp5.addSlider("analogVal0")
+  // Add Side UI for ECG Analog Voltage data
+  cp5.addSlider("ECG_ANALOG_VOLTAGE")
     .setLabel("ECG Analog Voltage")
     .setPosition(10, 10)
     .setSize(100, 20)
@@ -132,7 +129,8 @@ void addAccordion() {
     .setValue(100)
     .moveTo(accordionGroup2);
 
-  cp5.addSlider("digitalVal0")
+  // Add Side UI for Heart Pulse data
+  cp5.addSlider("HEART_PULSE")
     .setLabel("Heart Pulse")
     .setPosition(10, 40)
     .setSize(100, 20)
@@ -143,6 +141,7 @@ void addAccordion() {
     .setMax(1)
     .moveTo(accordionGroup2);
 
+  // Add Side UI for Beats Per Minute
   cp5.addSlider("BPM")
     .setPosition(10, 70)
     .setSize(100, 20)
@@ -150,13 +149,16 @@ void addAccordion() {
     .setRange(0, 200)
     .setValue(72);
 
-  cp5.addSlider("R2R")
+  // Add Side UI for Heart Pulse data
+  cp5.addSlider("R2R_IN_MS")
     .setLabel("R2R in Milliseconds")
     .setPosition(10, 100)
     .setSize(100, 20)
     .moveTo(accordionGroup2)
+    .setRange(0, 10000)
     .setValue(833);
 
+  // Add Side UI for extra setting
   Group accordionGroup3 = cp5.addGroup("otherSettings")
     .setLabel("Settings")
     .setBackgroundColor(color(0, 64))
