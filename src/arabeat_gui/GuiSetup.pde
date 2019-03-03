@@ -183,6 +183,6 @@ void addAccordion() {
     .addItem(accordionGroup2)
     .addItem(accordionGroup3);
 
-  accordion.open(0, 1);
+  accordion.open(0, 1, 2);
   accordion.setCollapseMode(Accordion.MULTI);
 }
