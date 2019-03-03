@@ -6,8 +6,9 @@ import processing.serial.*;
 
 Serial serial;
 int baudrate= 115200;
-final int AnalogVal0 = 0xE0;
-final int DigitalVal0 = 0x90;
+final int AnalogVal0 = 0xE0; // ECG Analog Voltage
+final int DigitalVal0 = 0x90; // Heart Pulse
+final int DigitalVal1 = 0x91; // R2R
 String portName;
 int negativeConversion = -65536;
 int data;
@@ -50,7 +51,15 @@ void serialMIDIRead() {
       delay(1);
     }
     data=serial.read();
-    graph2Plot(data);
+    setECG(data);
+    break;
+
+  case DigitalVal1:
+    while (serial.available()==0) {
+      delay(1);
+    }
+    data=serial.read();
+    setR2R(data);
     break;
   }
 }

@@ -45,12 +45,12 @@ void setupGUI() {
   plot1.setPos(10, headerImage.height+10);
   plot1.setDim(width*0.55, height*0.45);
   plot1.getXAxis().getAxisLabel().setText("Time");
-  plot1.getYAxis().getAxisLabel().setText("Analog Val0");
+  plot1.getYAxis().getAxisLabel().setText("ECG Analog Voltage");
 
   addAccordion();
 
   // Second Plot
-  plot2 = cp5.addChart("DigitalHeartBeat")
+  plot2 = cp5.addChart("Heart Pulse")
     .setPosition(73, headerImage.height+height*0.45+85)
     .setSize(int(width*0.56), int(height*0.20))
     .setRange(-0.5, 1.5)
@@ -120,11 +120,11 @@ void addAccordion() {
   Group accordionGroup2 = cp5.addGroup("midiData")
     .setLabel("Midi Data")
     .setBackgroundColor(color(0, 64))
-    .setBackgroundHeight(50);
+    .setBackgroundHeight(140);
 
 
   cp5.addSlider("analogVal0")
-    .setLabel("Analog Val0")
+    .setLabel("ECG Analog Voltage")
     .setPosition(10, 10)
     .setSize(100, 20)
     .setRange(-pow(2, 16), +pow(2, 16))
@@ -133,7 +133,7 @@ void addAccordion() {
     .moveTo(accordionGroup2);
 
   cp5.addSlider("digitalVal0")
-    .setLabel("Analog Val0")
+    .setLabel("Heart Pulse")
     .setPosition(10, 40)
     .setSize(100, 20)
     .setRange(0, 1)
@@ -147,9 +147,15 @@ void addAccordion() {
     .setPosition(10, 70)
     .setSize(100, 20)
     .moveTo(accordionGroup2)
-    .setColorCaptionLabel(color(0, 64))
     .setRange(0, 200)
-    .setValue(80);
+    .setValue(72);
+
+  cp5.addSlider("R2R")
+    .setLabel("R2R in Milliseconds")
+    .setPosition(10, 100)
+    .setSize(100, 20)
+    .moveTo(accordionGroup2)
+    .setValue(833);
 
   Group accordionGroup3 = cp5.addGroup("otherSettings")
     .setLabel("Settings")
