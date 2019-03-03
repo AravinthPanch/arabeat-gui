@@ -6,8 +6,10 @@ import processing.serial.*;
 Serial serial;
 
 final int ECG_ANALOG_VOLTAGE = 0xE0;
+final int RTOR_IN_MS = 0xE1;
 final int HEART_PULSE = 0x90;
-final int R2R_IN_MS = 0xE1; 
+final int ELECTRODES_TOUCHED = 0x91;
+
 
 int baudrate= 115200;
 String portName;
@@ -52,10 +54,10 @@ void serialMIDIRead() {
       delay(1);
     }
     data=serial.read();
-    set_heart_pulse(data);
+    set_heart_pulse_data_ui(data);
     break;
 
-  case R2R_IN_MS:
+  case RTOR_IN_MS:
     // For first 2 MSB
     while (serial.available()==0) {
       delay(1);
@@ -71,7 +73,15 @@ void serialMIDIRead() {
       delay(1);
     }
     data= (data|serial.read());    
-    set_R2R_in_ms(data);
+    set_rtor_in_ms_data_ui(data);
+    break;
+
+  case ELECTRODES_TOUCHED:
+    while (serial.available()==0) {
+      delay(1);
+    }
+    data=serial.read();
+    set_electrodes_touched_data_ui(data);
     break;
   }
 }

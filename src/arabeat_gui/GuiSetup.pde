@@ -117,7 +117,7 @@ void addAccordion() {
   Group accordionGroup2 = cp5.addGroup("midiData")
     .setLabel("Midi Data")
     .setBackgroundColor(color(0, 64))
-    .setBackgroundHeight(140);
+    .setBackgroundHeight(170);
 
   // Add Side UI for ECG Analog Voltage data
   cp5.addSlider("ECG_ANALOG_VOLTAGE")
@@ -144,19 +144,31 @@ void addAccordion() {
   // Add Side UI for Beats Per Minute
   cp5.addSlider("BPM")
     .setPosition(10, 70)
-    .setSize(100, 20)
-    .moveTo(accordionGroup2)
+    .setSize(100, 20)    
     .setRange(0, 200)
-    .setValue(72);
+    .setValue(72)
+    .moveTo(accordionGroup2);
 
-  // Add Side UI for Heart Pulse data
-  cp5.addSlider("R2R_IN_MS")
-    .setLabel("R2R in Milliseconds")
+  // Add Side UI for RTOR data
+  cp5.addSlider("RTOR_IN_MS")
+    .setLabel("RTOR in Milliseconds")
     .setPosition(10, 100)
     .setSize(100, 20)
-    .moveTo(accordionGroup2)
     .setRange(0, 10000)
-    .setValue(833);
+    .setValue(833)
+    .moveTo(accordionGroup2);
+
+  // Add Side UI for ELECTRODES_TOUCHED data
+  cp5.addSlider("ELECTRODES_TOUCHED")
+    .setLabel("ELECTRODES TOUCHED")
+    .setPosition(10, 130)
+    .setSize(100, 20)    
+    .setRange(0, 1)
+    .setValue(0)
+    .lock()
+    .setMin(0)
+    .setMax(1)
+    .moveTo(accordionGroup2);
 
   // Add Side UI for extra setting
   Group accordionGroup3 = cp5.addGroup("otherSettings")
@@ -186,7 +198,7 @@ void addAccordion() {
   // add g1, g2, and g3 to the accordion.
   accordion = cp5.addAccordion("Data")
     .setPosition(width*0.68, headerImage.height+50)
-    .setWidth(200)
+    .setWidth(300)
     .addItem(accordionGroup1)
     .addItem(accordionGroup2)
     .addItem(accordionGroup3);

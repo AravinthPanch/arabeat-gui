@@ -49,20 +49,27 @@ void controlEvent(ControlEvent theEvent) {
 Plots the points into the Digital Graph (Plot 2)
  Push function is used because we need to continously add as well as remove a point
  */
-void set_heart_pulse(int val) {
-  println("PULSE:"+val);
+void set_heart_pulse_data_ui(int val) {
+  //println("PULSE:"+val);
   plot2.push("digitalData", val);
   cp5.getController("HEART_PULSE").setValue(val);
 }
 
 /*
-Set received R2R value to UI 
+Set received RTOR value to UI 
  */
-void set_R2R_in_ms(int val) {
-  println("R2R:"+val);  
-  cp5.getController("R2R_IN_MS").setValue(val);
+void set_rtor_in_ms_data_ui(int val) {
+  println("RTOR:"+val);  
+  cp5.getController("RTOR_IN_MS").setValue(val);
 }
 
+/*
+Set received ELECTRODES_TOUCHED value to UI 
+ */
+void set_electrodes_touched_data_ui(int val) {
+  println("ELECTRODES_TOUCHED:"+val);  
+  cp5.getController("ELECTRODES_TOUCHED").setValue(val);
+}
 
 /*
 Plots the points into Analog Grph (Plot1)
@@ -72,7 +79,7 @@ void graph1Plot(int val) {
   while (plot1.getPointsRef().getNPoints()>cp5.getController("timeScale").getValue()) {
     plot1.removePoint(0);
   }
-  println("ECG:"+val);
+  //println("ECG:"+val);
   plot1.addPoint(relativeTime, val);
   relativeTime+=1;
   cp5.getController("ECG_ANALOG_VOLTAGE").setValue(val);
