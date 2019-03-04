@@ -8,11 +8,11 @@ import grafica.*;
 import controlP5.*;
 
 public GPlot plot1;
-public GPointsArray plotData1;
 int plotHeight1= 250;
 int plotWidth1= 450;
 
 PImage headerImage, buttonFullScreenImage, buttonMinimizeImage, buttonRefreshImage;
+public GPointsArray plotDataLayer1, plotDataLayer2;
 ControlP5 cp5;
 Accordion accordion;
 Button buttonFullScreen, buttonRefresh;
@@ -39,11 +39,16 @@ void setupGUI() {
     animationSequence[i] = loadImage("heart"+i+".gif");
     animationSequence[i].resize(100, 0);
   }
-
+  plotDataLayer1 = new GPointsArray();
+  plotDataLayer2 = new GPointsArray();
   // Setup for the first plot
   plot1 = new GPlot(this);
   plot1.setPos(10, headerImage.height+10);
   plot1.setDim(width*0.55, height*0.45);
+  plot1.addLayer("layer2", plotDataLayer2);
+  plot1.getLayer("layer2").setLineColor(color(255, 0, 0));
+  plot1.addLayer("layer1", plotDataLayer1);
+  plot1.getLayer("layer1").setLineColor(color(0, 0, 0));
   plot1.getXAxis().getAxisLabel().setText("Time");
   plot1.getYAxis().getAxisLabel().setText("ECG Analog Voltage");
 

@@ -51,8 +51,13 @@ Plots the points into the Digital Graph (Plot 2)
  */
 void set_heart_pulse_data_ui(int val) {
   //println("PULSE:"+val);
-  plot2.push("digitalData", val);
-  cp5.getController("HEART_PULSE").setValue(val);
+  // plot2.push("digitalData", val);
+  //cp5.getController("HEART_PULSE").setValue(val);
+  while (plotDataLayer2.getNPoints()>cp5.getController("timeScale").getValue()) {
+    plotDataLayer2.remove(0);
+  }
+  //println("ECG:"+val);
+  plotDataLayer2.add(relativeTime, val);
 }
 
 /*
@@ -76,14 +81,16 @@ Plots the points into Analog Grph (Plot1)
  here I manually add a point and symoltaneously remove a point.
  */
 void graph1Plot(int val) {
-  while (plot1.getPointsRef().getNPoints()>cp5.getController("timeScale").getValue()) {
-    plot1.removePoint(0);
+  while (plotDataLayer1.getNPoints()>cp5.getController("timeScale").getValue()) {
+    plotDataLayer1.remove(0);
   }
   //println("ECG:"+val);
-  plot1.addPoint(relativeTime, val);
+  plotDataLayer1.add(relativeTime, val);
   relativeTime+=1;
   cp5.getController("ECG_ANALOG_VOLTAGE").setValue(val);
 }
+
+
 
 /*
 This function is called in every frame of Processing
@@ -105,6 +112,8 @@ void GUIDraw() {
   plot1.drawBackground();
   plot1.drawBox();
   plot1.drawXAxis();
+  plot1.setPoints(plotDataLayer1, "layer1");
+  plot1.setPoints(plotDataLayer2, "layer2");
   plot1.drawYAxis();
   plot1.drawTitle();
   plot1.drawGridLines(GPlot.BOTH);
