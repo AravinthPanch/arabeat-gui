@@ -45,86 +45,37 @@ void controlEvent(ControlEvent theEvent) {
   }
 }
 
-/*
-Plots the points into the Digital Graph (Plot 2)
- Push function is used because we need to continously add as well as remove a point
- */
-void set_heart_pulse_data_ui(int val) {
-  //println("PULSE:"+val);
-  // plot2.push("digitalData", val);
-  //cp5.getController("HEART_PULSE").setValue(val);
-  while (plotDataLayer2.getNPoints()>cp5.getController("timeScale").getValue()) {
-    plotDataLayer2.remove(0);
-  }
-  //println("ECG:"+val);
-  plotDataLayer2.add(relativeTime, val);
-}
 
 /*
-Set received RTOR value to UI 
+Draws digital graph UI for binary information on the canvas
  */
-void set_rtor_in_ms_data_ui(int val) {
-  println("RTOR:"+val);  
-  cp5.getController("RTOR_IN_MS").setValue(val);
-}
-
-/*
-Set received ELECTRODES_TOUCHED value to UI 
- */
-void set_electrodes_touched_data_ui(int val) {
-  println("ELECTRODES_TOUCHED:"+val);  
-  cp5.getController("ELECTRODES_TOUCHED").setValue(val);
-}
-
-/*
-Plots the points into Analog Grph (Plot1)
- here I manually add a point and symoltaneously remove a point.
- */
-void graph1Plot(int val) {
-  while (plotDataLayer1.getNPoints()>cp5.getController("timeScale").getValue()) {
-    plotDataLayer1.remove(0);
-  }
-  //println("ECG:"+val);
-  plotDataLayer1.add(relativeTime, val);
-  relativeTime+=1;
-  cp5.getController("ECG_ANALOG_VOLTAGE").setValue(val);
-}
-
-
-
-/*
-This function is called in every frame of Processing
- It checks the size of the Screen and according to that changes the dimensions
- of other objects in the Screen to make them more Dynamic
- */
-void GUIDraw() {
-  //image(animationSequence[1], 1000, 150);
-  // Add Header Image
-  image(headerImage, (width/2)-125, 10);
-  //createAnimation(bpm);
-  bpm = int(cp5.getController("BPM").getValue());
-
-  //Draw the first plot
-  //plot1.activatePanning();
-  plot1.beginDraw();
-  plot1.setDim(width*0.55, height*0.45);
-  plot1.setPos(10, headerImage.height+10);
-  plot1.drawBackground();
-  plot1.drawBox();
-  plot1.drawXAxis();
-  plot1.setPoints(plotDataLayer1, "layer1");
-  plot1.setPoints(plotDataLayer2, "layer2");
-  plot1.drawYAxis();
-  plot1.drawTitle();
-  plot1.drawGridLines(GPlot.BOTH);
-  plot1.drawLines();
-  plot1.endDraw();
-
+void draw_digital_graph()
+{
   plot2.setPosition(73, headerImage.height+height*0.45+85)
     .setSize(int(width*0.56), int(height*0.20));
-
-  accordion.setPosition(width*0.68, headerImage.height+50);
 }
+
+
+/*
+Draws heartbeat animation
+ */
+void draw_heart_beat_animation()
+{
+  //image(animationSequence[1], 1000, 150);
+  // Add Header Image  
+  //createAnimation(bpm);
+  bpm = int(cp5.getController("BPM").getValue());
+}
+
+
+/*
+Draws other settings of the canvas
+ */
+void draw_canvas_settings()
+{
+  image(headerImage, (width/2)-125, 10);
+}
+
 
 /*
 Makes the size of the surface equal to that of the screen
@@ -141,6 +92,7 @@ public void setFullScreen() {
   }
 }
 
+
 /*
 This Stops the Serial, Cleans the Graph, and Refreshes the Serial Port List
  */
@@ -156,4 +108,106 @@ public void refreshEverything() {
   while (plot1.getPointsRef().getNPoints()>0) {
     plot1.removePoint(0);
   }
+}
+
+/*
+Set received RTOR value to side panel
+ */
+void set_rtor_in_ms_data(int val) 
+{
+  println("RTOR:"+val); 
+  
+  cp5.getController("RTOR_IN_MS").setValue(val);
+}
+
+
+/*
+Set received ELECTRODES_TOUCHED value to side panel
+ */
+void set_electrodes_touched_data(int val) 
+{ 
+  println("ELECTRODES_TOUCHED:"+val); 
+  
+  cp5.getController("ELECTRODES_TOUCHED").setValue(val);
+}
+
+
+/*
+Draws side panel UI for numeric display and settings
+ */
+void draw_side_panel()
+{
+  accordion.setPosition(width*0.68, headerImage.height+50);
+}
+
+
+/*
+Plots the points into the Digital Graph (Plot 2)
+ Push function is used because we need to continously add as well as remove a point
+ */
+void set_heart_pulse_data(int val) {
+  //println("PULSE:"+val);
+
+  // add data to graph
+  while (heart_pulse_data_layer.getNPoints()>cp5.getController("timeScale").getValue()) {
+    heart_pulse_data_layer.remove(0);
+  }
+  heart_pulse_data_layer.add(relativeTime, val);
+
+  // add data to side panel
+  cp5.getController("HEART_PULSE").setValue(val);
+}
+
+/*
+Plots the points into Analog Grph (Plot1)
+ here I manually add a point and symoltaneously remove a point.
+ */
+void set_ecg_analog_voltage_data(int val) 
+{
+  //println("ECG:"+val);
+
+  // add data to graph
+  while (ecg_analog_voltage_data_layer.getNPoints()>cp5.getController("timeScale").getValue()) {
+    ecg_analog_voltage_data_layer.remove(0);
+  }
+
+  ecg_analog_voltage_data_layer.add(relativeTime, val);
+  relativeTime+=1;
+
+  // add data to side panel
+  cp5.getController("ECG_ANALOG_VOLTAGE").setValue(val);
+}
+
+/*
+Draws analog graph UI for two bytes information
+ */
+void draw_analog_graph()
+{
+  //plot1.activatePanning();
+  plot1.beginDraw();
+  plot1.setDim(width*0.55, height*0.45);
+  plot1.setPos(10, headerImage.height+10);
+  plot1.drawBackground();
+  plot1.drawBox();
+  plot1.drawXAxis();
+  plot1.setPoints(ecg_analog_voltage_data_layer, "layer1");
+  plot1.setPoints(heart_pulse_data_layer, "layer2");
+  plot1.drawYAxis();
+  plot1.drawTitle();
+  plot1.drawGridLines(GPlot.BOTH);
+  plot1.drawLines();
+  plot1.endDraw();
+}
+
+
+/*
+This function is called in every frame of Processing
+ It checks the size of the Screen and according to that changes the dimensions
+ of other objects in the Screen to make them more Dynamic
+ */
+void GUIDraw() 
+{
+  draw_canvas_settings();
+  draw_analog_graph();
+  draw_side_panel();
 }

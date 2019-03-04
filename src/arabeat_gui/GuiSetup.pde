@@ -8,23 +8,24 @@ import grafica.*;
 import controlP5.*;
 
 public GPlot plot1;
-int plotHeight1= 250;
-int plotWidth1= 450;
-
 PImage headerImage, buttonFullScreenImage, buttonMinimizeImage, buttonRefreshImage;
-public GPointsArray plotDataLayer1, plotDataLayer2;
+public GPointsArray ecg_analog_voltage_data_layer, heart_pulse_data_layer;
 ControlP5 cp5;
 Accordion accordion;
 Button buttonFullScreen, buttonRefresh;
 Chart plot2;
-
 DropdownList choosePortDropdown, baudrateDropdown;
+
+int plotHeight1= 250;
+int plotWidth1= 450;
 //List of the Baudrate to Show on the DropdownList
 int baudrateList[] = {9600, 31250, 115200};
 
 void setupGUI() {
+
   noStroke();
   smooth();
+
   //Makes the screen flexible to Scal
   surface.setResizable(true);
 
@@ -34,27 +35,50 @@ void setupGUI() {
   headerImage = loadImage("arabeat.png");
   headerImage.resize(250, 0);
 
-  //Animation Image Sequence
+  ecg_analog_voltage_data_layer = new GPointsArray();
+  heart_pulse_data_layer = new GPointsArray();
+
+  add_analog_plot();
+  add_side_panel();
+}
+
+
+/*
+This creates analog graph UI for two bytes information
+ */
+void add_analog_plot()
+{
+  plot1 = new GPlot(this);
+  plot1.setPos(10, headerImage.height+10);
+  plot1.setDim(width*0.55, height*0.45);
+  plot1.addLayer("layer2", heart_pulse_data_layer);
+  plot1.getLayer("layer2").setLineColor(color(255, 0, 0));
+  plot1.addLayer("layer1", ecg_analog_voltage_data_layer);
+  plot1.getLayer("layer1").setLineColor(color(0, 0, 0));
+  plot1.getXAxis().getAxisLabel().setText("Time");
+  plot1.getYAxis().getAxisLabel().setText("ECG Analog Voltage");
+}
+
+
+/*
+This creates heartbeat animation UI
+ */
+void add_heart_beat_animation()
+{
+
   for (int i= 1; i<=sequenceLength; i++) {
     animationSequence[i] = loadImage("heart"+i+".gif");
     animationSequence[i].resize(100, 0);
   }
-  plotDataLayer1 = new GPointsArray();
-  plotDataLayer2 = new GPointsArray();
-  // Setup for the first plot
-  plot1 = new GPlot(this);
-  plot1.setPos(10, headerImage.height+10);
-  plot1.setDim(width*0.55, height*0.45);
-  plot1.addLayer("layer2", plotDataLayer2);
-  plot1.getLayer("layer2").setLineColor(color(255, 0, 0));
-  plot1.addLayer("layer1", plotDataLayer1);
-  plot1.getLayer("layer1").setLineColor(color(0, 0, 0));
-  plot1.getXAxis().getAxisLabel().setText("Time");
-  plot1.getYAxis().getAxisLabel().setText("ECG Analog Voltage");
+}
 
-  addAccordion();
 
-  // Second Plot
+/*
+This creates digital graph UI for binary information
+ */
+void add_digital_graph()
+{
+
   plot2 = cp5.addChart("Heart Pulse")
     .setPosition(73, headerImage.height+height*0.45+85)
     .setSize(int(width*0.56), int(height*0.20))
@@ -67,10 +91,11 @@ void setupGUI() {
   plot2.setData("digitalData", new float[100]);
 }
 
+
 /*
-This creates the Side Pane Menu (accordion)
+This creates side panel UI for numeric display and settings
  */
-void addAccordion() {
+void add_side_panel() {
   // List Setup
   Group accordionGroup1 = cp5.addGroup("Configuration")
     .setBackgroundColor(color(0, 64))

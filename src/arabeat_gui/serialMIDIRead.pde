@@ -46,7 +46,7 @@ void serialMIDIRead() {
     data= (data|serial.read());
     // if the first MSB has set bit then the Val is negative
     if (data>32767) data= data| negativeConversion;
-    graph1Plot(data);
+    set_ecg_analog_voltage_data(data);
     break;
 
   case HEART_PULSE:
@@ -54,7 +54,7 @@ void serialMIDIRead() {
       delay(1);
     }
     data=serial.read();
-    set_heart_pulse_data_ui(data);
+    set_heart_pulse_data(data);
     break;
 
   case RTOR_IN_MS:
@@ -73,7 +73,7 @@ void serialMIDIRead() {
       delay(1);
     }
     data= (data|serial.read());    
-    set_rtor_in_ms_data_ui(data);
+    set_rtor_in_ms_data(data);
     break;
 
   case ELECTRODES_TOUCHED:
@@ -81,7 +81,7 @@ void serialMIDIRead() {
       delay(1);
     }
     data=serial.read();
-    set_electrodes_touched_data_ui(data);
+    set_electrodes_touched_data(data);
     break;
   }
 }
