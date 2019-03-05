@@ -152,13 +152,13 @@ void set_rtor_in_ms_data(int val)
 
 
 /*
-Set received ELECTRODES_TOUCHED value to side panel
+Set received HANDS_ON value to side panel
  */
-void set_electrodes_touched_data(int val) 
+void set_hands_on_data(int val) 
 { 
-  println("ELECTRODES_TOUCHED:"+val); 
+  println("HANDS_ON:"+val); 
 
-  cp5.getController("ELECTRODES_TOUCHED").setValue(val);
+  cp5.getController("HANDS_ON").setValue(val);
 }
 
 

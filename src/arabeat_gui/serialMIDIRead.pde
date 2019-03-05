@@ -9,7 +9,7 @@ final int ECG_ANALOG_VOLTAGE = 0xE0;
 final int RTOR_IN_MS = 0xE1;
 final int RTOR_INTERRUPT_PULSE = 0xE2;
 final int HEART_PULSE = 0x90;
-final int ELECTRODES_TOUCHED = 0x91;
+final int HANDS_ON = 0x91;
 
 int baudrate= 115200;
 String portName;
@@ -79,12 +79,12 @@ void serialMIDIRead() {
     set_rtor_in_ms_data(data);
     break;
 
-  case ELECTRODES_TOUCHED:
+  case HANDS_ON:
     while (serial.available()==0) {
       delay(1);
     }
     data=serial.read();
-    set_electrodes_touched_data(data);
+    set_hands_on_data(data);
     break;
 
   case RTOR_INTERRUPT_PULSE:

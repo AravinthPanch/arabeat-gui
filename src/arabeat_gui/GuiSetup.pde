@@ -186,9 +186,9 @@ void add_side_panel() {
     .setValue(833)
     .moveTo(accordionGroup1);
 
-  // Add Side UI for ELECTRODES_TOUCHED data
-  cp5.addSlider("ELECTRODES_TOUCHED")
-    .setLabel("ELECTRODES TOUCHED")
+  // Add Side UI for HANDS_ON data
+  cp5.addSlider("HANDS_ON")
+    .setLabel("HANDS ON")
     .setPosition(second_column, 130)
     .setSize(100, 20)    
     .setRange(0, 1)
