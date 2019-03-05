@@ -67,6 +67,26 @@ void draw_digital_graph()
 
 
 /*
+Draws legends for the graph
+ */
+int legend_width = 20;
+int legend_height = 20;
+void draw_legends()
+{   
+  fill(0, 0, 255);
+  rect(left_margin + 50, legend_y , legend_width, legend_height);
+  text("ECG Analog Voltage", left_margin + 50 + legend_width + 10 , legend_y + legend_height / 2); 
+  
+  fill(255, 0, 0);
+  rect(left_margin + 200, legend_y , legend_width, legend_height);
+  text("Heart Pulse", left_margin + 200 + legend_width + 10 , legend_y + legend_height / 2);
+  
+  fill(0, 255, 0);
+  rect(left_margin + 300, legend_y , legend_width, legend_height);
+  text("RTOR Pulse", left_margin + 300 +legend_width + 10 , legend_y + legend_height / 2); 
+}
+
+/*
 Draws heartbeat animation
  */
 void draw_heart_beat_animation()
@@ -239,9 +259,7 @@ void draw_analog_graph()
   plot1.setPos(plot1_x, plot1_y);
   plot1.drawBackground();
   plot1.drawBox();
-  plot1.drawXAxis();
-  plot1.drawLegend(new String[] {"ECG Analog voltage", "Heart Pulse data", "RTOR Interrupt Pulse data"}, new float[] {0.07, 0.22, 0.35}, 
-                  new float[] {0.92, 0.92, 0.92});
+  plot1.drawXAxis();  
   plot1.setPoints(ecg_analog_voltage_data_layer, "layer1");
   plot1.setPoints(heart_pulse_data_layer, "layer2");
   plot1.setPoints(RTOR_interrupt_pulse_data_layer, "layer3");
@@ -263,4 +281,5 @@ void GUIDraw()
   draw_arabeat_logo();
   draw_analog_graph();
   draw_side_panel();
+  draw_legends();
 }

@@ -215,6 +215,7 @@ float plot1_width_in_percent = width * 11.5;
 float plot1_height_in_percent = height * 4.5;
 int plot1_x = 10;
 int plot1_y = 200;
+float legend_y = top_margin + side_panel_height + plot1_height_in_percent + 80;
 
 void add_analog_plot()
 {
