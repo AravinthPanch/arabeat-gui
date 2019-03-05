@@ -118,9 +118,9 @@ void add_side_panel() {
   baudrateDropdown = cp5.addDropdownList("baudrate")
     .setPosition(first_column, second_row)
     .setBackgroundColor(color(190))
-    .setItemHeight(20)
+    .setItemHeight(15)
     .setWidth(60)
-    .setBarHeight(15)
+    .setBarHeight(20)
     .moveTo(accordionGroup1)
     .setColorActive(color(255, 128))
     .setCaptionLabel("115200")
@@ -135,8 +135,8 @@ void add_side_panel() {
     .setPosition(first_column, first_row)
     .setWidth(180)
     .setBackgroundColor(color(190))
-    .setItemHeight(20)
-    .setBarHeight(15)
+    .setItemHeight(15)
+    .setBarHeight(20)
     .setColorActive(color(255, 128))
     .moveTo(accordionGroup1)
     .setCaptionLabel("Choose Port")
@@ -173,7 +173,7 @@ void add_side_panel() {
   cp5.addSlider("BPM")
     .setPosition(second_column, third_row)
     .setSize(100, 20)    
-    .setRange(0, 200)
+    .setRange(50, 120)
     .setValue(72)
     .moveTo(accordionGroup1);
 
@@ -182,7 +182,7 @@ void add_side_panel() {
     .setLabel("RTOR in Milliseconds")
     .setPosition(second_column, 100)
     .setSize(100, 20)
-    .setRange(0, 10000)
+    .setRange(500, 1000)
     .setValue(833)
     .moveTo(accordionGroup1);
 

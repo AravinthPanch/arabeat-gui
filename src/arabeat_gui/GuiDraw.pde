@@ -117,13 +117,20 @@ public void refreshEverything() {
 
 
 /*
-Set received RTOR value to side panel
+Set received RTOR value to side panel & caculate BPM 
  */
 void set_rtor_in_ms_data(int val) 
 {
   println("RTOR:"+val); 
 
   cp5.getController("RTOR_IN_MS").setValue(val);
+
+  // calculate bpm based on RTOR in Millisecond
+  float bpm = (float) (60 * 1000) / val;
+
+  //println("BPM:" + bpm);
+
+  cp5.getController("BPM").setValue(bpm);
 }
 
 
