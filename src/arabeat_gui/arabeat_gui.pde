@@ -17,6 +17,8 @@ This code was built with Processing 3.5.3
 The time for the y-axis of analog value graph
  */
 int relativeTime= 0;
+int window_x = 1280;
+int window_y = 800;
 
 void setup()
 {

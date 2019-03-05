@@ -8,56 +8,16 @@ import grafica.*;
 import controlP5.*;
 
 public GPlot plot1;
-PImage headerImage, buttonFullScreenImage, buttonMinimizeImage, buttonRefreshImage;
-public GPointsArray ecg_analog_voltage_data_layer, heart_pulse_data_layer;
+PImage arabeat_logo, buttonFullScreenImage, buttonMinimizeImage, buttonRefreshImage;
+public GPointsArray ecg_analog_voltage_data_layer, heart_pulse_data_layer, RTOR_interrupt_pulse_data_layer;
 ControlP5 cp5;
 Accordion accordion;
 Button buttonFullScreen, buttonRefresh;
 Chart plot2;
 DropdownList choosePortDropdown, baudrateDropdown;
 
-int plotHeight1= 250;
-int plotWidth1= 450;
 //List of the Baudrate to Show on the DropdownList
 int baudrateList[] = {9600, 31250, 115200};
-
-void setupGUI() {
-
-  noStroke();
-  smooth();
-
-  //Makes the screen flexible to Scal
-  surface.setResizable(true);
-
-  cp5 = new ControlP5(this);
-
-  // Add the Header Image to the Canva
-  headerImage = loadImage("arabeat.png");
-  headerImage.resize(250, 0);
-
-  ecg_analog_voltage_data_layer = new GPointsArray();
-  heart_pulse_data_layer = new GPointsArray();
-
-  add_analog_plot();
-  add_side_panel();
-}
-
-
-/*
-This creates analog graph UI for two bytes information
- */
-void add_analog_plot()
-{
-  plot1 = new GPlot(this);
-  plot1.setPos(10, headerImage.height+10);
-  plot1.setDim(width*0.55, height*0.45);
-  plot1.addLayer("layer2", heart_pulse_data_layer);
-  plot1.getLayer("layer2").setLineColor(color(255, 0, 0));
-  plot1.addLayer("layer1", ecg_analog_voltage_data_layer);
-  plot1.getLayer("layer1").setLineColor(color(0, 0, 0));
-  plot1.getXAxis().getAxisLabel().setText("Time");
-  plot1.getYAxis().getAxisLabel().setText("ECG Analog Voltage");
-}
 
 
 /*
@@ -80,7 +40,7 @@ void add_digital_graph()
 {
 
   plot2 = cp5.addChart("Heart Pulse")
-    .setPosition(73, headerImage.height+height*0.45+85)
+    .setPosition(73, arabeat_logo.height+height*0.45+85)
     .setSize(int(width*0.56), int(height*0.20))
     .setRange(-0.5, 1.5)
     .setView(Chart.LINE)
@@ -93,17 +53,60 @@ void add_digital_graph()
 
 
 /*
+This adds araBeat Logo to the canvas
+ */
+void add_arabeat_logo()
+{  
+  arabeat_logo = loadImage("arabeat.png");
+  arabeat_logo.resize(250, 0);
+}
+
+
+/*
 This creates side panel UI for numeric display and settings
  */
+int left_margin = 30;
+int top_margin = 30;
+int right_margin = 100;
+int side_panel_height = 170;
+int spacing_x = 50;
+int first_column = 10;
+int first_row = 10;
+int second_column = first_column + 220;
+int second_row = first_row + 30;
+int third_column = second_column + 220;
+int third_row = second_row + 30;
+int fourth_row = third_row + 30;
+int fifth_row = fourth_row + 30;
+
 void add_side_panel() {
+
   // List Setup
   Group accordionGroup1 = cp5.addGroup("Configuration")
     .setBackgroundColor(color(0, 64))
-    .setBackgroundHeight(130)
+    .setBackgroundHeight(side_panel_height)
     .setHeight(10);
 
+  buttonFullScreenImage = loadImage("fullscreen.png");
+  buttonFullScreenImage.resize(20, 20);
+  buttonMinimizeImage = loadImage("minimize.png");
+  buttonMinimizeImage.resize(20, 20);
+  buttonFullScreen = cp5.addButton("setFullScreen")
+    .setPosition(first_column, fourth_row)    
+    .setImage(buttonFullScreenImage)
+    .updateSize()
+    .moveTo(accordionGroup1);
+
+  buttonRefreshImage = loadImage("refresh.png");
+  buttonRefreshImage.resize(20, 20);
+  buttonRefresh = cp5.addButton("refreshEverything")
+    .setPosition(first_column, fifth_row)    
+    .setImage(buttonRefreshImage)
+    .updateSize()
+    .moveTo(accordionGroup1);
+
   cp5.addSlider("timeScale")
-    .setPosition(10, 70)
+    .setPosition(first_column, third_row)
     .setSize(100, 20)
     .setCaptionLabel("Time Scale")
     .setRange(0, 500)
@@ -113,7 +116,7 @@ void add_side_panel() {
     .moveTo(accordionGroup1);
 
   baudrateDropdown = cp5.addDropdownList("baudrate")
-    .setPosition(10, 40)
+    .setPosition(first_column, second_row)
     .setBackgroundColor(color(190))
     .setItemHeight(20)
     .setWidth(60)
@@ -129,7 +132,7 @@ void add_side_panel() {
   }
 
   choosePortDropdown = cp5.addDropdownList("choosePort")
-    .setPosition(10, 10)
+    .setPosition(first_column, first_row)
     .setWidth(180)
     .setBackgroundColor(color(190))
     .setItemHeight(20)
@@ -144,95 +147,107 @@ void add_side_panel() {
     choosePortDropdown.addItem(Serial.list()[i], i);
   }
 
-  Group accordionGroup2 = cp5.addGroup("midiData")
-    .setLabel("Midi Data")
-    .setBackgroundColor(color(0, 64))
-    .setBackgroundHeight(170);
-
   // Add Side UI for ECG Analog Voltage data
   cp5.addSlider("ECG_ANALOG_VOLTAGE")
     .setLabel("ECG Analog Voltage")
-    .setPosition(10, 10)
+    .setPosition(second_column, first_row)
     .setSize(100, 20)
     .setRange(-pow(2, 16), +pow(2, 16))
     .lock()
     .setValue(100)
-    .moveTo(accordionGroup2);
+    .moveTo(accordionGroup1);
 
   // Add Side UI for Heart Pulse data
   cp5.addSlider("HEART_PULSE")
     .setLabel("Heart Pulse")
-    .setPosition(10, 40)
+    .setPosition(second_column, second_row)
     .setSize(100, 20)
     .setRange(0, 1)
     .setValue(0)
     .lock()
     .setMin(0)
     .setMax(1)
-    .moveTo(accordionGroup2);
+    .moveTo(accordionGroup1);
 
   // Add Side UI for Beats Per Minute
   cp5.addSlider("BPM")
-    .setPosition(10, 70)
+    .setPosition(second_column, third_row)
     .setSize(100, 20)    
     .setRange(0, 200)
     .setValue(72)
-    .moveTo(accordionGroup2);
+    .moveTo(accordionGroup1);
 
   // Add Side UI for RTOR data
   cp5.addSlider("RTOR_IN_MS")
     .setLabel("RTOR in Milliseconds")
-    .setPosition(10, 100)
+    .setPosition(second_column, 100)
     .setSize(100, 20)
     .setRange(0, 10000)
     .setValue(833)
-    .moveTo(accordionGroup2);
+    .moveTo(accordionGroup1);
 
   // Add Side UI for ELECTRODES_TOUCHED data
   cp5.addSlider("ELECTRODES_TOUCHED")
     .setLabel("ELECTRODES TOUCHED")
-    .setPosition(10, 130)
+    .setPosition(second_column, 130)
     .setSize(100, 20)    
     .setRange(0, 1)
     .setValue(0)
     .lock()
     .setMin(0)
     .setMax(1)
-    .moveTo(accordionGroup2);
-
-  // Add Side UI for extra setting
-  Group accordionGroup3 = cp5.addGroup("otherSettings")
-    .setLabel("Settings")
-    .setBackgroundColor(color(0, 64))
-    .setBackgroundHeight(50);
-
-  buttonFullScreenImage = loadImage("fullscreen.png");
-  buttonFullScreenImage.resize(30, 30);
-  buttonMinimizeImage = loadImage("minimize.png");
-  buttonMinimizeImage.resize(30, 30);
-  buttonFullScreen = cp5.addButton("setFullScreen")
-    .setPosition(10, 10)
-    .moveTo(accordionGroup3)
-    .setImage(buttonFullScreenImage)
-    .updateSize();
-
-  buttonRefreshImage = loadImage("refresh.png");
-  buttonRefreshImage.resize(30, 30);
-  buttonRefresh = cp5.addButton("refreshEverything")
-    .setPosition(50, 10)
-    .moveTo(accordionGroup3)
-    .setImage(buttonRefreshImage)
-    .updateSize();
+    .moveTo(accordionGroup1);
 
   // create a new accordion
-  // add g1, g2, and g3 to the accordion.
   accordion = cp5.addAccordion("Data")
-    .setPosition(width*0.68, headerImage.height+50)
-    .setWidth(300)
-    .addItem(accordionGroup1)
-    .addItem(accordionGroup2)
-    .addItem(accordionGroup3);
+    .setPosition(arabeat_logo.width + spacing_x, top_margin)
+    .setWidth(width - arabeat_logo.width - right_margin)
+    .addItem(accordionGroup1);
 
-  accordion.open(0, 1, 2);
+  accordion.open(0);
   accordion.setCollapseMode(Accordion.MULTI);
+}
+
+/*
+This creates analog graph UI for two bytes information
+ */
+float plot1_width_in_percent = width * 11.5;
+float plot1_height_in_percent = height * 4.5;
+int plot1_x = 10;
+int plot1_y = 200;
+
+void add_analog_plot()
+{
+  // add data layers for analog graph
+  ecg_analog_voltage_data_layer = new GPointsArray();
+  heart_pulse_data_layer = new GPointsArray();
+  RTOR_interrupt_pulse_data_layer = new GPointsArray();
+
+  plot1 = new GPlot(this);
+  plot1.setPos(plot1_x, plot1_y);
+  plot1.setDim(plot1_width_in_percent, plot1_height_in_percent);  
+  plot1.addLayer("layer1", ecg_analog_voltage_data_layer);
+  plot1.getLayer("layer1").setLineColor(color(0, 0, 255));
+  plot1.addLayer("layer2", heart_pulse_data_layer);
+  plot1.getLayer("layer2").setLineColor(color(255, 0, 0));
+  plot1.addLayer("layer3", RTOR_interrupt_pulse_data_layer);
+  plot1.getLayer("layer3").setLineColor(color(0, 255, 0));
+  plot1.getXAxis().getAxisLabel().setText("Time");
+  //plot1.getYAxis().getAxisLabel().setText("ECG Analog Voltage");
+}
+
+
+void setupGUI() {
+
+  noStroke();
+  smooth();
+
+  //Makes the screen flexible to Scal
+  surface.setResizable(true);
+
+  cp5 = new ControlP5(this);
+
+  add_arabeat_logo();
+  add_analog_plot();
+  add_side_panel();
 }
