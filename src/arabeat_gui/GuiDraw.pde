@@ -15,11 +15,15 @@ int lastFrame= 1;
 int lastTime=1;
 int bpm= 80;
 
-void createAnimation(int bpm) {
-  int timeDiff =  millis() - lastTime;
+void createAnimation(int bpm) 
+{
+  int timeDiff =  millis() - lastTime;  
   int requiredTimeDiff = int((60*1000)/(bpm*sequenceLength));
+
   image(animationSequence[lastFrame], width*0.55+120, height*0.45+180);
-  if (timeDiff>=requiredTimeDiff) {
+
+  if (timeDiff>=requiredTimeDiff) 
+  {
     //change frame
     lastTime= millis();
     lastFrame= (lastFrame%sequenceLength)+1;
@@ -33,13 +37,16 @@ This function is called when any of the dropdown is selected. (Baudrate/Port)
  */
 boolean isPortChoosen = false;
 
-void controlEvent(ControlEvent theEvent) {
+void controlEvent(ControlEvent theEvent) 
+{
 
-  if (theEvent.isController() &&  (theEvent.getController().getName()).equals("baudrate")) {
+  if (theEvent.isController() &&  (theEvent.getController().getName()).equals("baudrate")) 
+  {
     int index = int(theEvent.getController().getValue());
     baudrate = baudrateList[index];
     println("Baudrate Choosen : "+ baudrate);
-  } else if (theEvent.isController() &&  (theEvent.getController().getName()).equals("choosePort")) {
+  } else if (theEvent.isController() &&  (theEvent.getController().getName()).equals("choosePort")) 
+  {
     int portNumber= int(theEvent.getController().getValue());
     portName = Serial.list()[portNumber];
     println("Port Choosen : "+ portName);
@@ -85,12 +92,15 @@ Makes the size of the surface equal to that of the screen
  */
 boolean isFullScreen= false;
 
-public void setFullScreen() {
-  if (!isFullScreen) {
+public void setFullScreen() 
+{
+  if (!isFullScreen) 
+  {
     buttonFullScreen.setImage(buttonMinimizeImage);
     surface.setSize(displayWidth, displayHeight);
     isFullScreen = true;
-  } else {
+  } else 
+  {
     buttonFullScreen.setImage(buttonFullScreenImage);
     surface.setSize(window_x, window_y);
     isFullScreen = false;
@@ -101,16 +111,23 @@ public void setFullScreen() {
 /*
 This Stops the Serial, Cleans the Graph, and Refreshes the Serial Port List
  */
-public void refreshEverything() {
-  if (isPortChoosen) {
+public void refreshEverything() 
+{
+  if (isPortChoosen) 
+  {
     isPortChoosen = false;
     serial.stop();
   }
+
   choosePortDropdown.clear();
-  for (int i=0; i<(Serial.list()).length; i++) {
+
+  for (int i=0; i < (Serial.list()).length; i++) 
+  {
     choosePortDropdown.addItem(Serial.list()[i], i);
   }
-  while (plot1.getPointsRef().getNPoints()>0) {
+
+  while (plot1.getPointsRef().getNPoints()>0) 
+  {
     plot1.removePoint(0);
   }
 }
@@ -158,11 +175,15 @@ void draw_side_panel()
 Set RTOR interrupt pulse data into the graph and side panel
  */
 void set_RTOR_interrupt_pulse_data(int val) {
+
   // add data to graph by add a point and removing prevoious point.
-  while (RTOR_interrupt_pulse_data_layer.getNPoints()>cp5.getController("timeScale").getValue()) {
+  while (RTOR_interrupt_pulse_data_layer.getNPoints() > cp5.getController("timeScale").getValue()) 
+  {
     RTOR_interrupt_pulse_data_layer.remove(0);
   }
+
   RTOR_interrupt_pulse_data_layer.add(relativeTime, val);
+  relativeTime += 1;
 }
 
 
@@ -173,10 +194,13 @@ void set_heart_pulse_data(int val) {
   //println("PULSE:"+val);
 
   // add data to graph by add a point and removing prevoious point.
-  while (heart_pulse_data_layer.getNPoints()>cp5.getController("timeScale").getValue()) {
+  while (heart_pulse_data_layer.getNPoints() > cp5.getController("timeScale").getValue()) 
+  {
     heart_pulse_data_layer.remove(0);
   }
+
   heart_pulse_data_layer.add(relativeTime, val);
+  relativeTime += 1;
 
   // add data to side panel
   cp5.getController("HEART_PULSE").setValue(val);
@@ -191,12 +215,13 @@ void set_ecg_analog_voltage_data(int val)
   //println("ECG:"+val);
 
   // add data to graph by add a point and removing prevoious point.
-  while (ecg_analog_voltage_data_layer.getNPoints()>cp5.getController("timeScale").getValue()) {
+  while (ecg_analog_voltage_data_layer.getNPoints() > cp5.getController("timeScale").getValue()) 
+  {
     ecg_analog_voltage_data_layer.remove(0);
   }
 
   ecg_analog_voltage_data_layer.add(relativeTime, val);
-  relativeTime+=1;
+  relativeTime += 1;
 
   // add data to side panel
   cp5.getController("ECG_ANALOG_VOLTAGE").setValue(val);
