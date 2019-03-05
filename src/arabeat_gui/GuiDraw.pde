@@ -240,6 +240,8 @@ void draw_analog_graph()
   plot1.drawBackground();
   plot1.drawBox();
   plot1.drawXAxis();
+  plot1.drawLegend(new String[] {"ECG Analog voltage", "Heart Pulse data", "RTOR Interrupt Pulse data"}, new float[] {0.07, 0.22, 0.35}, 
+                  new float[] {0.92, 0.92, 0.92});
   plot1.setPoints(ecg_analog_voltage_data_layer, "layer1");
   plot1.setPoints(heart_pulse_data_layer, "layer2");
   plot1.setPoints(RTOR_interrupt_pulse_data_layer, "layer3");
