@@ -23,6 +23,36 @@ int negativeConversion = -65536;
 int data;
 int command;
 
+/*
+checks if the data is awailable
+*/
+int data_available(){
+  if(read_log){
+    // fixMe: Return 0 if the file is ended
+    return 1;
+  }
+  else{
+    return serial.available();
+  }
+}
+
+/*
+Reads from Serial and logs the data
+or reads the data from previous logs
+*/
+int data_read(){
+  int data;
+  if(read_log){
+    data = read_log();
+  }
+  else{
+    data = serial.read();
+    write_log(data);
+  }
+ 
+  return data;
+}
+
 
 /*
 Read and parse two bytes data
@@ -32,23 +62,22 @@ int read_two_bytes_data()
   int result = 0;
 
   // For first 2 MSB
-  while (serial.available()==0) {
+  while (data_available()==0) {
     delay(1);
   }
-  result= (serial.read())<<7;
+  result= (data_read())<<7;
 
   //For middle 7 Bits
-  while (serial.available()==0) {
+  while (data_available()==0) {
     delay(1);
   }
-  result= (result|serial.read())<<7;
+  result= (result|data_read())<<7;
 
   //For last 7 Bits
-  while (serial.available()==0) {
+  while (data_available()==0) {
     delay(1);
   }
-  result= (result|serial.read());
-
+  result= (result|data_read());
   return result;
 }
 
@@ -59,7 +88,7 @@ Reads the Serial using MIDI and Firmat Protocol
  Detailed Explanation in the README.md
  */
 void serialMIDIRead() {
-  command= serial.read();
+  command= data_read();
   data= 0;
   switch(command) {
 
@@ -73,10 +102,10 @@ void serialMIDIRead() {
     break;
 
   case HEART_PULSE:
-    while (serial.available()==0) {
+    while (data_available()==0) {
       delay(1);
     }
-    data=serial.read();
+    data=data_read();
     set_heart_pulse_data(data);
     break;
 
@@ -86,10 +115,10 @@ void serialMIDIRead() {
     break;
 
   case HANDS_ON:
-    while (serial.available()==0) {
+    while (data_available()==0) {
       delay(1);
     }
-    data=serial.read();
+    data=data_read();
     set_hands_on_data(data);
     break;
 
