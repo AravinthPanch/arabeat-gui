@@ -71,13 +71,17 @@ int right_margin = 100;
 int side_panel_height = 170;
 int spacing_x = 50;
 int first_column = 10;
-int first_row = 10;
 int second_column = first_column + 220;
+int third_column = second_column + 170;
+int fourth_column = third_column + 170;
+int fifth_column = fourth_column + 170;
+int first_row = 10;
 int second_row = first_row + 30;
-int third_column = second_column + 220;
 int third_row = second_row + 30;
 int fourth_row = third_row + 30;
 int fifth_row = fourth_row + 30;
+int slider_width = 50;
+int slider_height = 20;
 
 void add_side_panel() {
 
@@ -92,7 +96,7 @@ void add_side_panel() {
   buttonMinimizeImage = loadImage("minimize.png");
   buttonMinimizeImage.resize(20, 20);
   buttonFullScreen = cp5.addButton("setFullScreen")
-    .setPosition(first_column, fourth_row)    
+    .setPosition(first_column, fifth_row)    
     .setImage(buttonFullScreenImage)
     .updateSize()
     .moveTo(accordionGroup1);
@@ -100,14 +104,15 @@ void add_side_panel() {
   buttonRefreshImage = loadImage("refresh.png");
   buttonRefreshImage.resize(20, 20);
   buttonRefresh = cp5.addButton("refreshEverything")
-    .setPosition(first_column, fifth_row)    
+    .setPosition(first_column + 30, fifth_row)    
     .setImage(buttonRefreshImage)
     .updateSize()
     .moveTo(accordionGroup1);
 
+
   cp5.addSlider("timeScale")
     .setPosition(first_column, third_row)
-    .setSize(100, 20)
+    .setSize(slider_width, slider_height)
     .setCaptionLabel("Time Scale")
     .setRange(0, 500)
     .setValue(400)
@@ -148,55 +153,129 @@ void add_side_panel() {
   }
 
   // Add Side UI for ECG Analog Voltage data
-  cp5.addSlider("ECG_ANALOG_VOLTAGE")
-    .setLabel("ECG Analog Voltage")
+  cp5.addSlider("ECG_MAX")
+    .setLabel("ECG MAX")
     .setPosition(second_column, first_row)
-    .setSize(100, 20)
+    .setSize(slider_width, slider_height)
     .setRange(-pow(2, 16), +pow(2, 16))
     .lock()
-    .setValue(100)
+    .setValue(0)
+    .moveTo(accordionGroup1);
+
+  // Add Side UI for ECG Analog Voltage data
+  cp5.addSlider("ECG_MIN")
+    .setLabel("ECG MIN")
+    .setPosition(second_column, second_row)
+    .setSize(slider_width, slider_height)
+    .setRange(-pow(2, 16), +pow(2, 16))
+    .lock()
+    .setValue(0)
     .moveTo(accordionGroup1);
 
   // Add Side UI for Heart Pulse data
   cp5.addSlider("HEART_PULSE")
     .setLabel("Heart Pulse")
-    .setPosition(second_column, second_row)
-    .setSize(100, 20)
+    .setPosition(second_column, third_row)
+    .setSize(slider_width, slider_height)
     .setRange(0, 1)
     .setValue(0)
     .lock()
     .setMin(0)
     .setMax(1)
-    .moveTo(accordionGroup1);
-
-  // Add Side UI for Beats Per Minute
-  cp5.addSlider("BPM")
-    .setPosition(second_column, third_row)
-    .setSize(100, 20)    
-    .setRange(50, 120)
-    .setValue(72)
-    .moveTo(accordionGroup1);
+    .moveTo(accordionGroup1); 
 
   // Add Side UI for RTOR data
   cp5.addSlider("RTOR_IN_MS")
     .setLabel("RTOR in Milliseconds")
-    .setPosition(second_column, 100)
-    .setSize(100, 20)
+    .setPosition(second_column, fourth_row)
+    .setSize(slider_width, slider_height)
     .setRange(500, 1000)
+    .lock()
     .setValue(833)
+    .moveTo(accordionGroup1);
+
+  // Add Side UI for Beats Per Minute
+  cp5.addSlider("BPM")
+    .setPosition(second_column, fifth_row)
+    .setSize(slider_width, slider_height)    
+    .setRange(50, 120)
+    .lock()
+    .setValue(72)
+    .moveTo(accordionGroup1);
+
+
+  // Add Side UI for HANDS_ON_COUNT data
+  cp5.addSlider("HANDS_ON_COUNT")
+    .setLabel("HANDS ON COUNT")
+    .setPosition(third_column, first_row)
+    .setSize(slider_width, slider_height)    
+    .setRange(0, 200)
+    .setValue(0)
+    .lock()
+    .moveTo(accordionGroup1);
+
+  // Add Side UI for HANDS_OFF_COUNT data
+  cp5.addSlider("HANDS_OFF_COUNT")
+    .setLabel("HANDS OFF COUNT")
+    .setPosition(third_column, second_row)
+    .setSize(slider_width, slider_height)    
+    .setRange(0, 200)
+    .setValue(0)
+    .lock()
+    .moveTo(accordionGroup1);
+
+  // Add Side UI for SAMPLE_COUNT data
+  cp5.addSlider("SAMPLE_COUNT")
+    .setLabel("SAMPLE COUNT")
+    .setPosition(third_column, third_row)
+    .setSize(slider_width, slider_height)    
+    .setRange(0, 200)
+    .setValue(0)
+    .lock()
     .moveTo(accordionGroup1);
 
   // Add Side UI for HANDS_ON data
   cp5.addSlider("HANDS_ON")
     .setLabel("HANDS ON")
-    .setPosition(second_column, 130)
-    .setSize(100, 20)    
+    .setPosition(third_column, fourth_row)
+    .setSize(slider_width, slider_height)    
     .setRange(0, 1)
     .setValue(0)
     .lock()
     .setMin(0)
     .setMax(1)
     .moveTo(accordionGroup1);
+
+  // Add Side UI for STABLE_RTOR_STATUS data
+  cp5.addSlider("STABLE_RTOR_STATUS")
+    .setLabel("STABLE RTOR STATUS")
+    .setPosition(third_column, fifth_row)
+    .setSize(slider_width, slider_height)    
+    .setRange(0, 2)
+    .setValue(0)
+    .lock()    
+    .moveTo(accordionGroup1);
+
+  // Add Side UI for HANDS_ON_COUNT data
+  cp5.addSlider("HANDS_ON_COUNT_THRESHOLD")
+    .setLabel("HANDS ON COUNT THRESHOLD")
+    .setPosition(fourth_column, first_row)
+    .setSize(slider_width, slider_height)    
+    .setRange(0, 200)
+    .setValue(0)
+    .lock()
+    .moveTo(accordionGroup1);
+
+  // Add Side UI for HANDS_OFF_COUNT data
+  cp5.addSlider("HANDS_OFF_COUNT_THRESHOLD")
+    .setLabel("HANDS OFF COUNT THRESHOLD")
+    .setPosition(fourth_column, second_row)
+    .setSize(slider_width, slider_height)    
+    .setRange(0, 200)
+    .setValue(0)
+    .lock()
+    .moveTo(accordionGroup1);
+
 
   // create a new accordion
   accordion = cp5.addAccordion("Data")

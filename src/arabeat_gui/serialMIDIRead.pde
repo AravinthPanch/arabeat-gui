@@ -8,6 +8,12 @@ Serial serial;
 final int ECG_ANALOG_VOLTAGE = 0xE0;
 final int RTOR_IN_MS = 0xE1;
 final int RTOR_INTERRUPT_PULSE = 0xE2;
+final int HANDS_ON_COUNT = 0xE3;
+final int HANDS_OFF_COUNT = 0xE4;
+final int SAMPLE_COUNT = 0xE5;
+final int HANDS_ON_COUNT_THRESHOLD = 0xE6;
+final int HANDS_OFF_COUNT_THRESHOLD = 0xE7;
+final int STABLE_RTOR_STATUS = 0xE8;
 final int HEART_PULSE = 0x90;
 final int HANDS_ON = 0x91;
 
@@ -90,6 +96,36 @@ void serialMIDIRead() {
   case RTOR_INTERRUPT_PULSE:
     data = read_two_bytes_data();
     set_RTOR_interrupt_pulse_data(data);
+    break;
+
+  case HANDS_ON_COUNT:
+    data = read_two_bytes_data();
+    set_hands_on_count_data(data);
+    break;
+
+  case HANDS_OFF_COUNT:
+    data = read_two_bytes_data();
+    set_hands_off_count_data(data);
+    break;
+
+  case SAMPLE_COUNT:
+    data = read_two_bytes_data();
+    set_sample_count_data(data);
+    break;
+
+  case HANDS_ON_COUNT_THRESHOLD:
+    data = read_two_bytes_data();
+    set_hands_on_count_threshold_data(data);
+    break;
+
+  case HANDS_OFF_COUNT_THRESHOLD:
+    data = read_two_bytes_data();
+    set_hands_off_count_threshold_data(data);
+    break;
+
+  case STABLE_RTOR_STATUS:
+    data = read_two_bytes_data();
+    set_stable_rtor_status_data(data);
     break;
   }
 }

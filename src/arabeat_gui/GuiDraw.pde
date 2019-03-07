@@ -74,16 +74,16 @@ int legend_height = 20;
 void draw_legends()
 {   
   fill(0, 0, 255);
-  rect(left_margin + 50, legend_y , legend_width, legend_height);
-  text("ECG Analog Voltage", left_margin + 50 + legend_width + 10 , legend_y + legend_height / 2); 
-  
+  rect(left_margin + 50, legend_y, legend_width, legend_height);
+  text("ECG Analog Voltage", left_margin + 50 + legend_width + 10, legend_y + legend_height / 2); 
+
   fill(255, 0, 0);
-  rect(left_margin + 200, legend_y , legend_width, legend_height);
-  text("Heart Pulse", left_margin + 200 + legend_width + 10 , legend_y + legend_height / 2);
-  
+  rect(left_margin + 200, legend_y, legend_width, legend_height);
+  text("Heart Pulse", left_margin + 200 + legend_width + 10, legend_y + legend_height / 2);
+
   fill(0, 255, 0);
-  rect(left_margin + 300, legend_y , legend_width, legend_height);
-  text("RTOR Pulse", left_margin + 300 +legend_width + 10 , legend_y + legend_height / 2); 
+  rect(left_margin + 300, legend_y, legend_width, legend_height);
+  text("RTOR Pulse", left_margin + 300 +legend_width + 10, legend_y + legend_height / 2);
 }
 
 /*
@@ -172,13 +172,83 @@ void set_rtor_in_ms_data(int val)
 
 
 /*
+Set received HANDS_ON_COUNT value to side panel
+ */
+void set_hands_on_count_data(int val) 
+{ 
+  //println("HANDS_ON_COUNT:"+val); 
+
+  cp5.getController("HANDS_ON_COUNT").setValue(val);
+}
+
+
+/*
+Set received HANDS_OFF_COUNT value to side panel
+ */
+void set_hands_off_count_data(int val) 
+{ 
+  //println("HANDS_OFF_COUNT:"+val); 
+
+  cp5.getController("HANDS_OFF_COUNT").setValue(val);
+}
+
+
+/*
+Set received SAMPLE_COUNT value to side panel
+ */
+void set_sample_count_data(int val) 
+{ 
+  //println("SAMPLE_COUNT:"+val); 
+
+  cp5.getController("SAMPLE_COUNT").setValue(val);
+}
+
+
+/*
+Set received HANDS_ON_COUNT_THRESHOLD value to side panel
+ */
+void set_hands_on_count_threshold_data(int val) 
+{ 
+  //println("HANDS_ON_COUNT_THRESHOLD:"+val);
+
+  cp5.getController("HANDS_ON_COUNT_THRESHOLD").setValue(val);
+}
+
+
+/*
+Set received HANDS_OFF_COUNT_THRESHOLD value to side panel
+ */
+void set_hands_off_count_threshold_data(int val) 
+{ 
+  //println("HANDS_OFF_COUNT_THRESHOLD:"+val);
+
+  cp5.getController("HANDS_OFF_COUNT_THRESHOLD").setValue(val);
+}
+
+
+/*
+Set received STABLE_RTOR_STATUS value to side panel
+ */
+void set_stable_rtor_status_data(int val) 
+{ 
+  //println("STABLE_RTOR_STATUS:"+val);
+
+  cp5.getController("STABLE_RTOR_STATUS").setValue(val);
+}
+
+
+/*
 Set received HANDS_ON value to side panel
  */
 void set_hands_on_data(int val) 
 { 
-  println("HANDS_ON:"+val); 
+  //println("HANDS_ON:"+val); 
 
   cp5.getController("HANDS_ON").setValue(val);
+
+  // reset max & min value for every hands on data arrival
+  prev_max_val = -15; // midline of hands off
+  prev_min_val = 0; // midline of hands on
 }
 
 
@@ -230,9 +300,11 @@ void set_heart_pulse_data(int val) {
 /*
 Set analg ecg voltage data into the graph and side panel
  */
+int prev_max_val = 0;
+int prev_min_val = 0;
 void set_ecg_analog_voltage_data(int val) 
 {
-  //println("ECG:"+val);
+  println("ECG:"+val);
 
   // add data to graph by add a point and removing prevoious point.
   while (ecg_analog_voltage_data_layer.getNPoints() > cp5.getController("timeScale").getValue()) 
@@ -243,8 +315,15 @@ void set_ecg_analog_voltage_data(int val)
   ecg_analog_voltage_data_layer.add(relativeTime, val);
   relativeTime += 1;
 
+  if (val > prev_max_val)
+    prev_max_val = val;
+
+  if (val < prev_min_val)
+    prev_min_val = val;
+
   // add data to side panel
-  cp5.getController("ECG_ANALOG_VOLTAGE").setValue(val);
+  cp5.getController("ECG_MAX").setValue(prev_max_val);
+  cp5.getController("ECG_MIN").setValue(prev_min_val);
 }
 
 
