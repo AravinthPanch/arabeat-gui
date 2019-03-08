@@ -151,7 +151,9 @@ void add_side_panel() {
   for (int i=0; i<(Serial.list()).length; i++) {
     choosePortDropdown.addItem(Serial.list()[i], i);
   }
-
+  // Add option to choose from file
+  choosePortDropdown.addItem("Select File",(Serial.list()).length);
+  
   // Add Side UI for ECG Analog Voltage data
   cp5.addSlider("ECG_MAX")
     .setLabel("ECG MAX")

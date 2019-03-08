@@ -44,14 +44,20 @@ void controlEvent(ControlEvent theEvent)
   {
     int index = int(theEvent.getController().getValue());
     baudrate = baudrateList[index];
-    println("Baudrate Choosen : "+ baudrate);
+    println("Baudrate Choosen : "+ baudrate); 
   } else if (theEvent.isController() &&  (theEvent.getController().getName()).equals("choosePort")) 
   {
     int portNumber= int(theEvent.getController().getValue());
-    portName = Serial.list()[portNumber];
-    println("Port Choosen : "+ portName);
-    serial = new Serial(this, portName, baudrate);
-    isPortChoosen = true;
+    if(portNumber == Serial.list().length){
+      // if the person chooses to select from a file 
+      initalize_log_reader();
+    }
+    else{
+      portName = Serial.list()[portNumber];
+      println("Port Choosen : "+ portName);
+      serial = new Serial(this, portName, baudrate);
+      isPortChoosen = true;
+    }
   }
 }
 

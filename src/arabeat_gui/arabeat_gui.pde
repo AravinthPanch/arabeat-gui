@@ -30,16 +30,11 @@ void setup()
   To create log set create log to True and it will create a 
   log file in the root dir with the current time
   
-  To read log set read log to true and specify the log file name
-  also specify the time interval between every data point.
+  To read from log choose select file in the Port options 
   
   Donot set read and write log at the same time!
   */
-  read_log= false;
-  create_log= true;
-  log_delay=10;
-  logFile = "7_7_3_20_33_45_data";
-  initalize_log_reader(logFile);
+  create_log= false;
   initalize_log_writer();
   background(255);
 }

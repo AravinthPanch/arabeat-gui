@@ -5,7 +5,6 @@ BufferedReader log_reader;
 Boolean create_log = true; 
 Boolean read_log = false;
 int log_delay = 10;
-String logFile = "";
 
 String getTimeStamp(){
   int day = day();
@@ -19,13 +18,22 @@ String getTimeStamp(){
 
 void initalize_log_writer(){
   if(create_log){
-    log_writer = createWriter(getTimeStamp()+"_data"); 
+    log_writer = createWriter("data_"+getTimeStamp()); 
   }
 }
 
-void initalize_log_reader(String file_name){
-  if(read_log){
-    log_reader = createReader(file_name);  
+void initalize_log_reader(){
+    selectInput("Select a file to process:","logSelected");
+}
+
+void logSelected(File selection){
+  if(selection == null){
+    println("File was not Selected");
+  }
+  else{
+    println(selection.getAbsolutePath());
+    log_reader = createReader(selection.getName());
+    read_log = true;
   }
 }
 
@@ -34,7 +42,6 @@ int read_log(){
   if(read_log){
     try{
       int data = log_reader.read();
-      println(data);
       delay(log_delay);
       return data;
     }catch (Exception e) {
