@@ -21,6 +21,6 @@
   "dependencies": {
     "jquery": "^3.3.1",
     "serialport": "^7.1.4",
-    "smoothie": "^1.35.0"
+    "smoothie": "^1.36.1"
   }
 }
